@@ -1,0 +1,12 @@
+---
+- hosts: localhost
+  connection: local
+  vars_files:
+    - "{{ lookup('env', 'PWD') }}/vars.yaml"  
+  tasks:
+    - name: Destroy resource group
+      azure_rm_resourcegroup:
+        name: "{{ resource_group }}"
+        location: "{{ location }}"
+        force_delete_nonempty: true
+        state: absent
