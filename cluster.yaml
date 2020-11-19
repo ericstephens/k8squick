@@ -1,12 +1,9 @@
 ---
 - hosts: localhost
   connection: local
-  vars:
-    resource_group: k8squick
-    name: "{{ resource_group }}"
-    location: eastus
-    username: azureuser
-    key_path_public: '~/.ssh/id_rsa.pub'
+  vars_files:
+    - "{{ lookup('env', 'PWD') }}/vars.yaml"  
+    - "{{ lookup('env', 'PWD') }}/creds.yaml"  
   tasks:
     - name: Create resource group
       azure_rm_resourcegroup:
@@ -16,10 +13,11 @@
 # #az aks create --resource-group myResourceGroup --name myAKSCluster --node-count 1 --enable-addons monitoring --generate-ssh-keys
     - name: Create kluster
       azure_rm_aks: 
-        name: "{{ name }}"
+        name: "{{ cluster_name }}"
         resource_group: "{{ resource_group }}"
         location: "{{ location }}"
-        dns_prefix: "{{ name }}"
+        dns_prefix: "{{ cluster_name }}"
+        kubernetes_version: "{{ aks_version }}"
         linux_profile:
           admin_username: "{{ username }}"
           ssh_key: "{{ lookup('file', '{{ key_path_public }}') }}"
@@ -27,4 +25,7 @@
           - name: default
             count: 1
             vm_size: Standard_D2_v2
+        service_principal:
+          client_id: "{{ appId }}"
+          client_secret: "{{ password }}"
         state: present
