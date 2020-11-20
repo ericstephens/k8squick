@@ -1,0 +1,6 @@
+resource_group: k8squick
+location: eastus
+username: azureuser
+key_path_public: '~/.ssh/id_rsa.pub'
+aks_version: "1.19.3"
+cluster_name: "kluster007"
