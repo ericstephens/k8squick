@@ -1,0 +1,28 @@
+---
+- name: Create resource group
+  azure_rm_resourcegroup:
+    name: "{{ resource_group }}"
+    location: "{{ location }}"
+    state: present
+# - name: Capture the service principal details
+#   command: "az ad sp create-for-rbac --name eas-sp > {{ lookup('env', 'PWD') }}/creds.yaml"  
+- name: Create kluster
+  azure_rm_aks: 
+    name: "{{ cluster_name }}"
+    resource_group: "{{ resource_group }}"
+    location: "{{ location }}"
+    dns_prefix: "{{ cluster_name }}"
+    kubernetes_version: "{{ aks_version }}"
+    linux_profile:
+      admin_username: "{{ username }}"
+      ssh_key: "{{ lookup('file', '{{ key_path_public }}') }}"
+    agent_pool_profiles:
+      - name: default
+        count: 1
+        vm_size: Standard_D2_v2
+    service_principal:
+      client_id: "{{ appId }}"
+      client_secret: "{{ password }}"
+    state: present
+- name: Get credentials for subsequent kubectl invocations
+  command: az aks get-credentials --overwrite-existing --resource-group "{{ resource_group }}" --name "{{ cluster_name }}"

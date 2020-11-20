@@ -1,0 +1,8 @@
+---
+- name: Deploy the azure-vote application
+  command: "kubectl apply -f {{ role_path }}/azure-vote.yaml"   
+- name: Capture the public IP for the app
+  command: kubectl get service azure-vote-front | grep azure-vote-front | awk '{split($0,a," "); print a[4]}'
+  register: output
+- debug:
+    var: output

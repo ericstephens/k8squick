@@ -1,4 +1,4 @@
 .DS_Store
 venv
-bin
-creds.yaml
+**/bin
+**/creds.yaml

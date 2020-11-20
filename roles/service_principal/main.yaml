@@ -1,0 +1,8 @@
+---
+- name: Create and capture AD service principal
+  azure_ad_serviceprincipal:
+    app_id: "eas-sp"
+    state: present
+    #tenant: "{{ tenant_id }}"
+# - name: Capture the service principal details
+#   command: "az ad sp create-for-rbac --name eas-sp > {{ lookup('env', 'PWD') }}/creds.yaml"  

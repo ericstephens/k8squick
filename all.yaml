@@ -3,6 +3,9 @@
   vars_files:
     - "{{ lookup('env', 'PWD') }}/creds.yaml"  
   tasks:
+    - name: Build the cluster
+      include_role:
+        name: cluster
     - name: Deploy the vote app
       include_role:
         name: azure-vote
