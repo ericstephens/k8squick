@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reversomatic-deploy
+spec:
+  replicas: 10
+  selector:
+    matchLabels:
+      app: reversomatic
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: reversomatic
+    spec:
+      containers:
+      - name: reversomatic-pod
+        image: ericstephens/weather:v2
+        ports:
+        - containerPort: 5000
