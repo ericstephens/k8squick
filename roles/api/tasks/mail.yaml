@@ -1,0 +1,5 @@
+- name: build the code
+  command: go build -installsuffix cgo -o ../bin/api api.go
+  environment:
+    GO_ENABLED: 0
+    GOOS: linux

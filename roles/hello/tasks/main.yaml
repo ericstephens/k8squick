@@ -1,0 +1,19 @@
+- name: build the code
+  command: "go build -installsuffix cgo -o {{ role_path }}/bin/hello {{ role_path }}/src/hello.go"
+  environment:
+    GO_ENABLED: 0
+    GOOS: linux
+# https://appfleet.com/blog/integrating-ansible-and-docker-in-ci-cd-process-using-jenkins-job/
+# https://docs.ansible.com/ansible/latest/collections/community/general/docker_image_module.html
+- name: Push Docker image to Registry
+  docker_image:
+    name: ericstephens/myhello:latest
+    build:
+      path: "{{ role_path }}/src"
+      pull: true
+    state: present
+    tag: "0.1"
+    force_tag: yes
+    repository: ericstephens/myhello:latest
+    push: yes
+    source: build

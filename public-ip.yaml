@@ -1,0 +1,10 @@
+- hosts: localhost
+  connection: local
+  vars_files:
+    - "{{ lookup('env', 'PWD') }}/creds.yaml"  
+  tasks:
+    - name: Capture the public IP for the app
+      command: kubectl get service azure-vote-front
+      register: output
+    - debug:
+        var: output.stdout_lines
